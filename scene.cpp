@@ -7,12 +7,23 @@ void setup_camera(){
 	camera.h = 1800;
 	camera.c = 18000;
 
-	camera.p = { -20, 10, -100 };
+	float ratio = 1;
+	ratio = (
+			std::pow(std::abs(1.0-camera.time/3.0), 4) * std::copysign(1.0, 1.0 - camera.time/3.0)
+		) * 0.95 + 0.05;
+
+	camera.p = { -20/ratio, 10, -100 };
+
+	float orig = ((vec){ -20, 10, -100 }).mag();
+
+	camera.p *= ratio;
+	camera.c *= std::pow(camera.p.mag()/orig, 1.1);
+
 	camera.t.z = camera.p.norm() * -1.0;
 	camera.t.init();
 	
-	camera.spp = 2048;
-	camera.sync = 4;
+	camera.spp = 32;
+	camera.sync = 1;
 	camera.bounces = 5;
 }
 
